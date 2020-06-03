@@ -25,4 +25,12 @@ class ProjectController extends Controller
         // redirect
         return redirect('/projects');
     }
+
+    public function show(Project $project)
+    {
+        /* NOTE with model binding */
+        // $project = Project::findOrFail(request('project'));
+
+        return view('projects.show', compact('project'));
+    }
 }
