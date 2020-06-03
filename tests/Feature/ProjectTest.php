@@ -28,4 +28,23 @@ class ProjectTest extends TestCase
 
         $this->get('/projects')->assertSee($attributes['title']);
     }
+
+    /** @test */
+    public function a_project_requires_a_title()
+    {
+        /* NOTE factory()->make() will return object */
+        // $attributes = factory('App\Project')->make(['title' => '']);
+
+        /* NOTE factory()->raw will return array */
+        $attributes = factory('App\Project')->raw(['title' => '']);
+
+        $this->post('/projects', $attributes)->assertSessionHasErrors('title');
+    }
+
+    /** @test */
+    public function a_project_requires_a_description()
+    {
+        $attributes = factory('App\Project')->raw(['description' => '']);
+        $this->post('/projects', $attributes)->assertSessionHasErrors('description');
+    }
 }

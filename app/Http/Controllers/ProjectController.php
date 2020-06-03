@@ -16,8 +16,13 @@ class ProjectController extends Controller
 
     public function store()
     {
-        $project = Project::create(request()->all());
+        // validate
+        $attributes = request()->validate(['title' => 'required', 'description' => 'required']);
 
+        // presist
+        Project::create($attributes);
+
+        // redirect
         return redirect('/projects');
     }
 }
