@@ -16,11 +16,20 @@ class ProjectController extends Controller
 
     public function store()
     {
+
         // validate
-        $attributes = request()->validate(['title' => 'required', 'description' => 'required']);
+        $attributes = request()->validate([
+            'title' => 'required',
+            'description' => 'required',
+        ]);
 
         // presist
-        Project::create($attributes);
+        /* NOTE create relation without eloquent accosiation feature */
+        // $attributes['owner_id'] = auth()->id();
+        // Project::create($attributes);
+
+        /* NOTE Create relation with accosiation feature */
+        auth()->user()->projects()->create($attributes);
 
         // redirect
         return redirect('/projects');
