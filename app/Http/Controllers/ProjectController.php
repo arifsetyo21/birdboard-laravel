@@ -9,7 +9,7 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        $projects = Project::all();
+        $projects = auth()->user()->projects;
 
         return view('projects.index', compact('projects'));
     }
@@ -39,6 +39,12 @@ class ProjectController extends Controller
     {
         /* NOTE with model binding */
         // $project = Project::findOrFail(request('project'));
+
+        // if (auth()->id()  !== (int) $project->owner_id) {
+        /* NOTE isNot() method is for checking is true */
+        if (auth()->user()->isNot($project->owner)) {
+            abort(403);
+        }
 
         return view('projects.show', compact('project'));
     }
