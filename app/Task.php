@@ -24,6 +24,11 @@ class Task extends Model
 
             $task->project->recordActivity('created_task');
         });
+
+        /* NOTE Has changed with observer */
+        // static::deleted(function ($task) {
+        //     $task->project->recordActivity('deleted_task');
+        // });
     }
 
     public function project()
@@ -46,5 +51,7 @@ class Task extends Model
     public function incomplete()
     {
         $this->update(['completed' => false]);
+
+        $this->project->recordActivity('incompleted_task');
     }
 }

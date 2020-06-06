@@ -27,6 +27,6 @@ class ProjectObserver
      */
     public function updated(project $project)
     {
-        $project->recordActivity('updated', $project);
+        $project->recordActivity('updated');
     }
 }
