@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class ProjectTest extends TestCase
+class ManageProjectTest extends TestCase
 {
     /* NOTE Using faker trait, and Refresh DB after testing */
     use WithFaker, RefreshDatabase;
@@ -56,6 +56,7 @@ class ProjectTest extends TestCase
     /** @test */
     public function a_user_can_update_a_project()
     {
+        $this->withoutExceptionHandling();
         $project = ProjectFactory::create();
 
         $this->actingAs($project->owner)

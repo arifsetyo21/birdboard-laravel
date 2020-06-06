@@ -12,4 +12,8 @@ class Activity extends Model
     {
         return $this->morphTo();
     }
+
+    protected $casts = [
+        'changes' => 'array'
+    ];
 }
