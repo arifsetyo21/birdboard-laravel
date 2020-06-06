@@ -60,8 +60,10 @@ class ProjectTest extends TestCase
 
         $this->actingAs($project->owner)
             ->patch($project->path(), $attributes = [
-                'notes' => 'Changed'
+                'title' => 'Changed', 'description' => 'Changed', 'notes' => 'Changed'
             ])->assertRedirect($project->path());
+
+        $this->get($project->path() . '/edit')->assertOk();
 
         $this->assertDatabaseHas('projects', $attributes);
     }

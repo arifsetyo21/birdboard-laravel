@@ -18,11 +18,7 @@ class ProjectController extends Controller
     {
 
         // validate
-        $attributes = request()->validate([
-            'title' => 'required',
-            'description' => 'required:max:100',
-            'notes' => 'min:3'
-        ]);
+        $attributes = $this->validateRequest();
 
         // presist
         /* NOTE create relation without eloquent accosiation feature */
@@ -53,15 +49,28 @@ class ProjectController extends Controller
         return view('projects.create');
     }
 
+    public function edit(Project $project)
+    {
+        return view('projects.edit', compact('project'));
+    }
+
     public function update(Project $project)
     {
-
         $this->authorize('update', $project);
 
-        $project->update([
-            'notes' => request('notes')
-        ]);
+        $attributes = $this->validateRequest();
+
+        $project->update($attributes);
 
         return redirect($project->path());
+    }
+
+    protected function validateRequest()
+    {
+        return request()->validate([
+            'title' => 'required',
+            'description' => 'required:max:100',
+            'notes' => 'min:3'
+        ]);
     }
 }
