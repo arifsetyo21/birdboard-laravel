@@ -12,6 +12,32 @@ class ProjectTaskTest extends TestCase
     use WithFaker, RefreshDatabase;
 
     /** @test */
+    public function only_owner_of_a_project_may_add_task()
+    {
+        $this->signIn();
+
+        $project = factory('App\Project')->create();
+
+        $this->post($project->path() . '/tasks', ['body' => 'Test task'])->assertStatus(403);
+
+        $this->assertDatabaseMissing('tasks', ['body' => 'Test task']);
+    }
+
+    /** @test */
+    public function only_owner_of_a_project_may_update_task()
+    {
+        $this->signIn();
+
+        $project = factory('App\Project')->create();
+        $task = $project->addTask('test task');
+
+        $this->patch($project->path() . '/tasks/' . $task->id, ['body' => 'Test task'])
+            ->assertStatus(403);
+
+        $this->assertDatabaseMissing('tasks', ['body' => 'changed']);
+    }
+
+    /** @test */
     public function a_project_can_have_tasks()
     {
         $this->withoutExceptionHandling();
@@ -42,14 +68,25 @@ class ProjectTaskTest extends TestCase
     }
 
     /** @test */
-    public function only_owner_of_a_project_may_add_task()
+    public function a_test_can_be_updated()
     {
+        $this->withoutExceptionHandling();
         $this->signIn();
 
-        $project = factory('App\Project')->create();
+        $project = auth()->user()->projects()->create(
+            factory(Project::class)->raw()
+        );
 
-        $this->post($project->path() . '/tasks', ['body' => 'Test task'])->assertStatus(403);
+        $task = $project->addTask('test task');
 
-        $this->assertDatabaseMissing('tasks', ['body' => 'Test task']);
+        $this->patch($project->path() . '/tasks/' . $task->id, [
+            'body' => 'changed',
+            'completed' => true
+        ]);
+
+        $this->assertDatabaseHas('tasks', [
+            'body' => 'changed',
+            'completed' => true
+        ]);
     }
 }
