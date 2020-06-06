@@ -20,7 +20,8 @@ class ProjectController extends Controller
         // validate
         $attributes = request()->validate([
             'title' => 'required',
-            'description' => 'required',
+            'description' => 'required:max:100',
+            'notes' => 'min:3'
         ]);
 
         // presist
@@ -42,9 +43,7 @@ class ProjectController extends Controller
 
         // if (auth()->id()  !== (int) $project->owner_id) {
         /* NOTE isNot() method is for checking is true */
-        if (auth()->user()->isNot($project->owner)) {
-            abort(403);
-        }
+        $this->authorize('update', $project);
 
         return view('projects.show', compact('project'));
     }
@@ -52,5 +51,17 @@ class ProjectController extends Controller
     public function create()
     {
         return view('projects.create');
+    }
+
+    public function update(Project $project)
+    {
+
+        $this->authorize('update', $project);
+
+        $project->update([
+            'notes' => request('notes')
+        ]);
+
+        return redirect($project->path());
     }
 }

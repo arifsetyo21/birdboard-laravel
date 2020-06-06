@@ -17,6 +17,7 @@ class CreateProjectsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('owner_id');
             $table->string('title');
+            $table->text('notes')->nullable();
             $table->text('description');
             $table->timestamps();
 

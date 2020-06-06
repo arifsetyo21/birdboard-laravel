@@ -33,7 +33,7 @@
             @endforeach
 
             <div class="card mb-3">
-               <form action="{{$project->path() . '/tasks'}}" method="POST">
+               <form action="{{ $project->path() . '/tasks' }}" method="POST">
                   @csrf
                   <input type="text" name="body" class="w-full" placeholder="Add new task..." id="">
                </form>
@@ -44,7 +44,16 @@
             <h2 class="text-lg text-grey font-normal mb-3">General Notes</h2>
 
             {{-- General Notes --}}
-            <textarea class="card w-full" style="min-height: 200px">Lorem ipsum.</textarea>
+            <form action="{{$project->path()}}" method="post">
+               @csrf
+               @method('PATCH')
+               <textarea name="notes" class="card w-full mb-4" style="min-height: 200px"
+                  placeholder="Anything special that you want make!">
+                  {{ $project->notes }}
+               </textarea>
+
+               <button type="submit" class="button">Save</button>
+            </form>
          </div>
       </div>
 
