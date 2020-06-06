@@ -1,20 +1,5 @@
 <?php
 
-/* NOTE this is Activity feature, will replaced with observer */
-// \App\Project::created(function ($project) {
-//     \App\Activity::create([
-//         'project_id' => $project->id,
-//         'description' => 'created',
-//     ]);
-// });
-
-// \App\Project::updated(function ($project) {
-//     \App\Activity::create([
-//         'project_id' => $project->id,
-//         'description' => 'updated',
-//     ]);
-// });
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes

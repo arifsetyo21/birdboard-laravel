@@ -31,4 +31,14 @@ class ActivityFeedTest extends TestCase
 
         $this->assertEquals('updated', $project->activity->last()->description);
     }
+
+    /** @test */
+    function creating_a_new_task_records_project_activity()
+    {
+        $project = ProjectFactory::create();
+        $project->addTask('Some task');
+
+        $this->assertCount(3, $project->activity);
+        $this->assertEquals('created_task', $project->activity->last()->description);
+    }
 }
