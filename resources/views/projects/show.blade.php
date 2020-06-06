@@ -21,6 +21,13 @@
             <div class="card mb-3">{{$task->body}}</div>
             @endforeach
 
+            <div class="card mb-3">
+               <form action="{{$project->path() . '/tasks'}}" method="POST">
+                  @csrf
+                  <input type="text" name="body" class="w-full" placeholder="Add new task..." id="">
+               </form>
+            </div>
+
          </div>
          <div>
             <h2 class="text-lg text-grey font-normal mb-3">General Notes</h2>

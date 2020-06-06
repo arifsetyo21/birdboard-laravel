@@ -29,10 +29,10 @@ class ProjectController extends Controller
         // Project::create($attributes);
 
         /* NOTE Create relation with accosiation feature */
-        auth()->user()->projects()->create($attributes);
+        $project = auth()->user()->projects()->create($attributes);
 
         // redirect
-        return redirect('/projects');
+        return redirect($project->path());
     }
 
     public function show(Project $project)

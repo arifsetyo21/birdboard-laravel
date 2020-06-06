@@ -40,4 +40,16 @@ class ProjectTaskTest extends TestCase
 
         $this->post($project->path() . '/tasks', $attributes)->assertSessionHasErrors('body');
     }
+
+    /** @test */
+    public function only_owner_of_a_project_may_add_task()
+    {
+        $this->signIn();
+
+        $project = factory('App\Project')->create();
+
+        $this->post($project->path() . '/tasks', ['body' => 'Test task'])->assertStatus(403);
+
+        $this->assertDatabaseMissing('tasks', ['body' => 'Test task']);
+    }
 }
