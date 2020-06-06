@@ -31,7 +31,7 @@ class ProjectTest extends TestCase
         ];
 
         /* NOTE login as a user and create project */
-        $this->actingAs(factory(\App\User::class)->create());
+        $this->signIn();
 
         $this->get('/projects/create')->assertStatus(200);
 
@@ -49,7 +49,7 @@ class ProjectTest extends TestCase
         // $attributes = factory('App\Project')->make(['title' => '']);
 
         /* NOTE factory()->raw will return array */
-        $this->actingAs(factory(\App\User::class)->create());
+        $this->signIn();
         $attributes = factory('App\Project')->raw(['title' => '']);
 
         $this->post('/projects', $attributes)->assertSessionHasErrors('title');
@@ -58,7 +58,7 @@ class ProjectTest extends TestCase
     /** @test */
     public function a_project_requires_a_description()
     {
-        $this->actingAs(factory(\App\User::class)->create());
+        $this->signIn();
         $attributes = factory('App\Project')->raw(['description' => '']);
         $this->post('/projects', $attributes)->assertSessionHasErrors('description');
     }
@@ -66,7 +66,7 @@ class ProjectTest extends TestCase
     /** @test */
     public function a_user_can_view_their_project()
     {
-        $this->be(factory(\App\User::class)->create());
+        $this->signIn();
 
         $this->withoutExceptionHandling();
 
@@ -74,13 +74,13 @@ class ProjectTest extends TestCase
 
         $this->get($project->path())
             ->assertSee($project->title)
-            ->assertSee($project->description);
+            ->assertSee(\Illuminate\Support\Str::limit($project->description, 100));
     }
 
     /** @test */
     public function an_authenticated_user_cannot_view_the_projects_of_others()
     {
-        $this->actingAs(factory(\App\User::class)->create());
+        $this->signIn();
 
         // $this->withoutExceptionHandling();
 
