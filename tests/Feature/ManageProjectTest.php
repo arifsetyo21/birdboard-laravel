@@ -69,6 +69,22 @@ class ProjectTest extends TestCase
     }
 
     /** @test */
+    public function a_user_can_update_project_general_notes()
+    {
+        $project = ProjectFactory::create();
+
+        $this->actingAs($project->owner)
+            ->patch($project->path(), $attributes = [
+                'notes' => 'Changed'
+            ]);
+        // ->assertRedirect($project->path());
+
+        // $this->get($project->path() . '/edit')->assertRedirect('login');
+
+        $this->assertDatabaseHas('projects', $attributes);
+    }
+
+    /** @test */
     public function a_project_requires_a_title()
     {
         /* NOTE factory()->make() will return object */
